@@ -21,6 +21,7 @@ object ChattStore {
     private val nFields = Chatt::class.declaredMemberProperties.size - 1
 
     private lateinit var queue: RequestQueue
+//    private const val serverUrl = "https://mada.eecs.umich.edu/"
     private const val serverUrl = "https://qys.pipzza.pw/"
 
     fun initQueue(context: Context) {
