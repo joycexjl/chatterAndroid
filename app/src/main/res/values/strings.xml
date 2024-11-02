@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">composeChatter</string>
+    <string name="chatter">Chatter</string>
+    <string name="post">Post</string>
+    <string name="send">Send</string>
+    <string name="username">joycexjl</string>
+    <string name="message">Some short sample text.</string>
+    <string name="back">Back</string>
+</resources>
