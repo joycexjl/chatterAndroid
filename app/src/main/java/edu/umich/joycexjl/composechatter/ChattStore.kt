@@ -1,8 +1,8 @@
 package edu.umich.joycexjl.composechatter
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
@@ -38,9 +38,9 @@ object ChattStore {
 
         val getRequest = JsonObjectRequest("${serverUrl}getchatts/",
             { response ->
+                Log.d("API", response.toString())
                 val chattsReceived = try { response.getJSONArray("chatts") } catch (e: JSONException) { JSONArray() }
                 var idx = 0
-
                 _chatts.clear()
                 for (i in 0 until chattsReceived.length()) {
                     val chattEntry = chattsReceived[i] as JSONArray
