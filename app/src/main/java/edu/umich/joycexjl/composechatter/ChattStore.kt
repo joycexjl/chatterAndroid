@@ -13,7 +13,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.UUID
 import kotlin.reflect.full.declaredMemberProperties
-import java.nio.charset.Charset
 
 object ChattStore {
     private var isRetrieving = false
