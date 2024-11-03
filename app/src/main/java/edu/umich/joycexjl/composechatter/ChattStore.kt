@@ -6,12 +6,14 @@ import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley.newRequestQueue
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.UUID
 import kotlin.reflect.full.declaredMemberProperties
+import java.nio.charset.Charset
 
 object ChattStore {
     private var isRetrieving = false
@@ -83,5 +85,23 @@ object ChattStore {
         )
 
         queue.add(postRequest)
+    }
+
+    fun deleteChatt(chatt: Chatt, completion: () -> Unit) {
+        Log.d("delete API", chatt.id.toString())
+
+        val deleteRequest = StringRequest(
+            Request.Method.DELETE,
+            "${serverUrl}deletechatt/?delete_id=${chatt.id.toString()}",
+            { response ->
+                Log.d("delete API", "Delete response: $response")
+                completion()
+            },
+            { error ->
+                Log.e("delete API", "Error: ${error.localizedMessage ?: "Delete request error"}")
+            }
+        )
+
+        queue.add(deleteRequest)
     }
 }
