@@ -9,11 +9,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          ruby-version: '3.2'
+          bundler-cache: true
           
       - name: Decode Keystore
         env:
@@ -26,7 +26,7 @@ jobs:
         uses: sparkfabrik/android-build-action@v1.5.0
         with:
           project-path: android
-          keystore-file: app/release.jks
+          keystore-content: ${{ secrets.KEYSTORE_FILE_BASE64 }}  # Changed from keystore-file
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
