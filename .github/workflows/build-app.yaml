@@ -1,33 +1,23 @@
 name: Build Android App
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
     
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      # Set up Ruby
-      - uses: ruby/setup-ruby@v1
+    
+      - name: Set up JDK
+        uses: actions/setup-java@v3
         with:
-          ruby-version: '3.2.2'  # Use a stable version
-          bundler-cache: true
-
-        # Install fastlane
-      - name: Install Fastlane
-        run: |
-          gem install bundler
-          bundle install
-          gem install fastlane
+          distribution: 'temurin'
+          java-version: '17'
           
       - name: Decode Keystore
         run: |
           mkdir -p app
-          echo ${{ secrets.KEYSTORE_FILE_BASE64 }} | base64 --decode > app/chatterAndroidKey.jks
+          echo ${{ secrets.KEYSTORE_FILE_BASE64 }} | base64 --decode > app/release.jks
       
       - name: Build Android App
         uses: sparkfabrik/android-build-action@v1.5.0
