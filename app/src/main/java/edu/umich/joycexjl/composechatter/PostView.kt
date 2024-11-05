@@ -34,17 +34,13 @@ import androidx.compose.ui.unit.sp
 import edu.umich.joycexjl.composechatter.ChattStore.getChatts
 import edu.umich.joycexjl.composechatter.ChattStore.postChatt
 import edu.umich.joycexjl.composechatter.R.string.back
-import edu.umich.joycexjl.composechatter.R.string.message
-import edu.umich.joycexjl.composechatter.R.string.post
-import edu.umich.joycexjl.composechatter.R.string.send
-import edu.umich.joycexjl.composechatter.R.string.username
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostView() {
     val context = LocalContext.current
     val navController = LocalNavHostController.current
-    val username = stringResource(R.string.username)
+    var username by rememberSaveable { mutableStateOf("") } // 改为可编辑的状态
     var message by rememberSaveable { mutableStateOf(context.getString(R.string.message)) }
 
     @Composable
@@ -60,11 +56,11 @@ fun PostView() {
 
         IconButton(onClick = {
             canSend = false
-            postChatt(Chatt(username, message)) {
+            postChatt(Chatt(username.ifEmpty { context.getString(R.string.username) }, message)) {
                 getChatts()
             }
             navController.popBackStack()
-        }, enabled = canSend) {
+        }, enabled = canSend && message.isNotBlank() && username.isNotBlank()) {
             Icon(
                 Icons.AutoMirrored.Filled.Send,
                 stringResource(R.string.send)
@@ -90,10 +86,29 @@ fun PostView() {
                 it.calculateEndPadding(LayoutDirection.Ltr)+8.dp,
                 it.calculateBottomPadding())
         ) {
-            Text(username,
-                Modifier
+            TextField(
+                value = username,
+                onValueChange = { username = it },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.username),
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                modifier = Modifier
                     .padding(0.dp, 30.dp, 0.dp, 0.dp)
-                    .fillMaxWidth(1f), textAlign= TextAlign.Center, fontSize = 20.sp
+                    .fillMaxWidth(),
+                textStyle = TextStyle(
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center
+                ),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent
+                ),
+                singleLine = true
             )
 
             TextField(

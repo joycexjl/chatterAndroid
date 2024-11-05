@@ -1,5 +1,5 @@
 package edu.umich.joycexjl.composechatter
-
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -20,6 +20,8 @@ import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.ui.unit.IntOffset
 import kotlin.math.roundToInt
 import kotlin.math.abs
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun ChattListRow(chatt: Chatt) {
@@ -90,7 +92,7 @@ fun ChattListRow(chatt: Chatt) {
 
                 chatt.timestamp?.let {
                     Text(
-                        it,
+                        formatTimestamp(it),
                         fontSize = 14.sp,
                         textAlign = TextAlign.End,
                         modifier = Modifier.padding(4.dp, 8.dp, 4.dp, 0.dp)
@@ -142,4 +144,39 @@ fun ChattListRow(chatt: Chatt) {
         )
     }
 
+}
+
+private fun formatTimestamp(timestamp: String): String {
+    return try {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+        // 确保时间戳格式正确
+        val formattedTimestamp = if (!timestamp.contains("T")) {
+            timestamp.replace(" ", "T")
+        } else {
+            timestamp
+        }
+        val date = sdf.parse(formattedTimestamp)
+        val now = System.currentTimeMillis()
+        val diff = now - date.time
+
+        when {
+            diff < 60_000 -> "just now"
+            diff < 3600_000 -> {
+                val mins = diff / 60_000
+                "${mins} ${if (mins == 1L) "minute" else "minutes"} ago"
+            }
+            diff < 86400_000 -> {
+                val hours = diff / 3600_000
+                "${hours} ${if (hours == 1L) "hour" else "hours"} ago"
+            }
+            diff < 2592000_000 -> {
+                val days = diff / 86400_000
+                "${days} ${if (days == 1L) "day" else "days"} ago"
+            }
+            else -> SimpleDateFormat("MMM d", Locale.ENGLISH).format(date)
+        }
+    } catch (e: Exception) {
+        Log.e("ChattList", e.toString())
+        timestamp
+    }
 }
