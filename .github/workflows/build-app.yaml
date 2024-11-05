@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Decode Keystore
         run: |
-          echo ${{ secrets.KEYSTORE_FILE_BASE64 }} | base64 --decode > app/release.jks
+          echo ${{ secrets.KEYSTORE_FILE_BASE64 }} | base64 --decode > app/chatterAndroidKey.jks
       
       - name: Build Android App
         uses: sparkfabrik/android-build-action@v1.5.0
