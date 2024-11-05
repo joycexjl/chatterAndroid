@@ -12,8 +12,14 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
+          ruby-version: '3.0'  # Using a stable version
           bundler-cache: true
+          
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          gem install fastlane
+          gem install abbrev
           
       - name: Decode Keystore
         env:
@@ -26,7 +32,7 @@ jobs:
         uses: sparkfabrik/android-build-action@v1.5.0
         with:
           project-path: android
-          keystore-content: ${{ secrets.KEYSTORE_FILE_BASE64 }}  # Changed from keystore-file
+          keystore-content: ${{ secrets.KEYSTORE_FILE_BASE64 }}
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
