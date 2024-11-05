@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Decode Keystore
         run: |
+          mkdir -p app
           echo ${{ secrets.KEYSTORE_FILE_BASE64 }} | base64 --decode > app/chatterAndroidKey.jks
       
       - name: Build Android App
