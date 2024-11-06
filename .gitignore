@@ -12,7 +12,7 @@ local.properties
 .kotlin/
 
 # release baseline
-app/release/baselineProfiles
+app/release/baselineProfiles/*
 
 # Android Studio generated files and folders
 captures/
