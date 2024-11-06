@@ -38,20 +38,23 @@ object ChattStore {
             isRetrieving = true
         }
 
-        val getRequest = JsonObjectRequest("${serverUrl}getchatts/",
+        val getRequest = JsonObjectRequest("${serverUrl}getimages/",
             { response ->
-                Log.d("API", response.toString())
                 val chattsReceived = try { response.getJSONArray("chatts") } catch (e: JSONException) { JSONArray() }
                 var idx = 0
                 _chatts.clear()
                 for (i in 0 until chattsReceived.length()) {
                     val chattEntry = chattsReceived[i] as JSONArray
                     if (chattEntry.length() == nFields) {
-                        _chatts.add(Chatt(username = chattEntry[0].toString(),
+                        _chatts.add(Chatt(
+                            username = chattEntry[0].toString(),
                             message = chattEntry[1].toString(),
                             id = UUID.fromString(chattEntry[2].toString()),
                             timestamp = chattEntry[3].toString(),
-                            altRow = idx % 2 == 0))
+                            imageURL = chattEntry[4].toString(),
+                            videoURL = chattEntry[5].toString(),
+                            altRow = idx % 2 == 0),
+                        )
                         idx += 1
                     } else {
                         Log.e("getChatts", "Received unexpected number of fields: " + chattEntry.length().toString() + " instead of " + nFields.toString())
@@ -87,8 +90,6 @@ object ChattStore {
     }
 
     fun deleteChatt(chatt: Chatt, completion: () -> Unit) {
-        Log.d("delete API", chatt.id.toString())
-
         val deleteRequest = StringRequest(
             Request.Method.DELETE,
             "${serverUrl}deletechatt/?delete_id=${chatt.id.toString()}",

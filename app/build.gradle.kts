@@ -79,4 +79,6 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.8.0")
     implementation("com.android.volley:volley:1.2.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
+    implementation("io.coil-kt.coil3:coil-compose:3.0.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.0")
 }
